@@ -4,6 +4,7 @@ const {engine} = require('express-handlebars')
 const BodyParser = require('body-parser')
 const Post = require ("./models/Post")
 const bodyParser = require('body-parser')
+const { where } = require('sequelize')
 
 
 // config
@@ -45,6 +46,14 @@ const bodyParser = require('body-parser')
             res.send("Houve um erro: " + erro)
         })
         
+   })
+
+   app.get('/deletar/:id', function(req, res){
+    Post.destroy({where: {'id': req.params.id}}).then(function(){
+        res.send('Post deletado com sucesso')
+    }).catch(function(erro){
+        res.send("Esta postagem não existe! ")
+    })
    })
 
 app.listen(8081, function(){
