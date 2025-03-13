@@ -8,7 +8,14 @@ const bodyParser = require('body-parser')
 
 // config
     //Template Engine
-        app.engine('handlebars', engine({defaultLayout: 'main'}))
+    app.engine('handlebars', engine({
+        defaultLayout: 'main',
+        runtimeOptions: {
+            allowProtoPropertiesByDefault: true,
+            allowProtoMethodsByDefault: true,
+        }
+    }));
+    
         app.set('view engine','handlebars')
     //Body Parser
         app.use(bodyParser.urlencoded({ extended: false }))
@@ -16,7 +23,11 @@ const bodyParser = require('body-parser')
 //Rotas
 
     app.get('/', function(req, res){
-        res.render('home')
+        Post.findAll({order:[['id', 'DESC']]}).then(function(posts){
+            console.log(posts)
+            res.render('home', {posts: posts})
+        })
+        
     })
 
     app.get('/cad', function(req, res){
